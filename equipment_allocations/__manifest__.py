@@ -16,7 +16,7 @@ Lend equipment to employees
 Assign equipment to employees
 """,
   "live_test_url":"http://odoodemo.webkul.com/?module=equipment_allocations",
-  "depends":['hr_maintenance','maintenance','stock','hr','web','saudi_hr_employee'],
+  "depends":['hr_maintenance','maintenance','stock','hr','web'],
   "data":  [
       'edi/mail_template.xml',
       'security/maintenance_security.xml',
