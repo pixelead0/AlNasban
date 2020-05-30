@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <data>
+
+        <record id="hr_equipment_allocated_view" model="ir.ui.view">
+            <field name="name">equipment.allocated.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='personal_information']" position="after">
+                    <page name="equipment" string="Allocated Equipments">
+                    <field name="allocated_euipments_ids">
+                            <tree editable="bottom">
+                                <field name="allocated_date" string="Date"/>
+                                <field name="equipment_prod" string="Product"/>
+                                <field name="quantity" string="Quantity"/>
+                                <field name="equi_assigned_by" string="Responsible"/>
+                                <field name="source_loc" string="Source Location"/>
+                                <field name="destination_loc" string="Destination Location"/>
+                                <field name="status" string="Status"/>
+                            </tree>
+                    </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="equipment_product_action" model="ir.actions.act_window">
+            <field name="res_model">maintenance.equipment</field>
+            <field name="name">Equipments</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_product_id': [active_id], 'default_product_id': active_id}</field>
+            <field name="domain">[('product_id', '=', active_id)]</field>
+        </record>
+
+        <record id="wk_maintenance_request_view_search_inherit_hr" model="ir.ui.view">
+            <field name="name">maintenance.request.view.search.inherit.hr</field>
+            <field name="model">maintenance.request</field>
+            <field name="inherit_id" ref="hr_maintenance.maintenance_request_view_search_inherit_hr"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='my_requests']" position="replace">
+                    <filter string="My Requests" name="my_requests" domain="[('owner_user_id', '=', uid)]"/>
+                </xpath>
+                <xpath expr="//filter[@name='created_by']" position="replace">
+                    <filter string='Created By' name='created_by' domain="[]" context="{'group_by': 'owner_user_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="wk_hr_equipment_view_search" model="ir.ui.view">
+            <field name="name">wk.equipment.search</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="field[@name='category_id']" position="after">
+                    <field name="product_id"/>
+                    <field name="partner_ref" string="System Tag"/>
+                </xpath>
+                <xpath expr="//group" position="inside">
+                    <filter string='Product' name="by_product" domain="[]" context="{'group_by': 'product_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="equipment_product_normal_form_view">
+            <field name="name">product.product</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button name="%(equipment_product_action)d" type="action" icon="fa-laptop" class="oe_stat_button" attrs="{'invisible': [('equipment_counts', '&lt;=', 0)]}">
+                        <field string="Equipments" name="equipment_counts" widget="statinfo"/>
+                    </button>
+                </div>
+            </field>
+        </record>
+
+        <record id="wk_maintenance_equipment_view_form_inherit_hr" model="ir.ui.view">
+            <field name="name">maintenance.equipment.view.form.inherit.hr</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="hr_maintenance.maintenance_equipment_view_form_inherit_hr"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='equipment_assign_to']" position="replace">
+                    <label for="equipment_assign_to"/>
+                    <div>
+                        <field name="equipment_assign_to" widget="radio"/>
+                        <label for="equipment_assign_to" string="Hint:- If you want to assign this equipment to an employee permanently then, create an allocation request on behalf of him by selecting allocation type as permanent and do approve/allocate it."/>
+                    </div>
+                </xpath>
+
+                <xpath expr="//field[@name='employee_id']" position="replace">
+                    <field name="owner_user_id" string="Employee" attrs="{'invisible': ['|', ('equipment_assign_to', '=', 'department'), ('equipment_assign_to', '=', False)]}" readonly="1" options="{'no_create_edit': True, 'no_open':True,'no_create':True}"/>
+                </xpath>
+                <xpath expr="//field[@name='department_id']" position="attributes">
+                    <attribute name="options">{'no_create_edit': True, 'no_open':True,'no_create':True}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_view_calendar" model="ir.ui.view">
+            <field name="name">equipment.request.calendar</field>
+            <field name="model">allocation.request</field>
+            <field name="arch" type="xml">
+                <calendar string="Allocation's" date_start="request_date" color="request_user_id">
+                    <field name="name"/>
+                    <field name="request_user_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_form_action" model="ir.actions.act_window">
+            <field name="name">Allocation Requests</field>
+            <field name="res_model">allocation.request</field>
+            <field name="view_mode">kanban,tree,form,pivot,calendar</field>
+            <field name="context">{
+                'default_equipment_id': active_id,
+            }</field>
+            <field name="domain">[('equipment_id', '=', active_id)]</field>
+        </record>
+
+        <record id="hr_equipment_view_form_inherit" model="ir.ui.view">
+            <field name="name"> equipment.form </field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="product_id" options="{'no_create_edit': True, 'no_open':True,'no_create':True}" groups="equipment_allocations.group_equipment_officer"/>
+                    <field name="partner_id" options="{'no_create_edit': True, 'no_open':True,'no_create':True}"/>
+                </xpath>
+                <xpath expr="//field[@name='warranty_date']" position="attributes">
+                    <attribute name="string">Warranty Expires on</attribute>
+                </xpath>
+                <xpath expr="//field[@name='location']" position="after">
+                    <field name="purchase_date" />
+                    <label for="warranty_period"/>
+                    <div class="o_row">
+                        <field name="warranty_period" class="oe_inline" /> Months
+                    </div>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="History">
+                        <field name="equipment_history_ids">
+                            <tree>
+                                <field name="emp_id" string="ID"/>
+                                <field name="employee" string="Full Name"/>
+                                <field name="emp_location" string="Location"/>
+                                <field name="assigned_by" string="Responsible"/>
+                                <field name="assign_date" string="Date"/>
+                                <field name="destination" string="Destination Location"/>
+                                <field name="source" string="Source Location"/>
+                                <field name="status" string="Status"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                </xpath>
+                <xpath expr="//button[@icon='fa-ticket']" position="after">
+                    <button name="%(hr_equipment_allocation_request_form_action)d" type="action" class="oe_stat_button" icon="fa-pie-chart">
+                        <field string="Allocation" name="allocation_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_view_search" model="ir.ui.view">
+            <field name="name">equipment.allocation.search</field>
+            <field name="model">allocation.request</field>
+            <field name="arch" type="xml">
+                <search string="allocation Request Search">
+                    <field name="name" string="Serach For" filter_domain="['|','|','|','|','|',('name','ilike',self),('equipment_id.name','ilike',self),('request_user_id','ilike',self),('equipment_id.model','ilike',self),('equipment_id.serial_no','ilike',self),('equipment_id.partner_ref', 'ilike', self)]"/>
+                    <field name="equipment_id"/>
+                    <field name="request_date"/>
+                    <field name="request_user_id"/>
+                    <field name="approved_by"/>
+                    <field name="category_id"/>
+                    <field name="state"/>
+                    <field name="type"/>
+                    <separator/>
+                    <filter string="Today" name="today_date" domain="[('request_date','&gt;=',current_date),('request_date','&lt;=',current_date)]"/>
+                    <filter string="New" domain="[('state', '=', 'new')]" name="todo"/>
+                    <filter string="Approved" name="approved_state" domain="[('state', '=', 'approved')]"/>
+                    <filter string="Allocated" name="allocated" domain="[('state', '=', 'allocated')]"/>
+                    <filter string="Returned" name="returned" domain="[('state', '=', 'returned')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancel')]"/>
+                    <filter string="Top Priorities" name="top_priority" domain="[('priority', '=', '3')]"/>
+                    <separator/>
+                    <filter string="My Requests" name="my_requests" domain="[('request_user_id', '=', uid)]"/>
+                    <separator/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <separator/>
+                    <filter string="On-Demand" name="on_demand_type" domain="[('type','=','on-demand')]"/>
+                    <filter string="Permanent" name="permanent_" domain="[('type','=','permanent')]"/>
+                    <group expand='0' string='Group by...'>
+                        <filter string='Allocated By' domain="[]" context="{'group_by': 'approved_by'}" name="allocated_by"/>
+                        <filter string='Category' domain="[]" context="{'group_by' : 'category_id'}" name="category_by"/>
+                        <filter string='State' domain="[]" context="{'group_by' : 'state'}" name="state_by"/>
+                        <filter string='Allocation Type' domain="[]" context="{'group_by' : 'type'}" name="group_by_type"/>
+                        <filter string='Allocated to' name='allocated_to' domain="[]" context="{'group_by': 'request_user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_view_kanban" model="ir.ui.view">
+            <field name="name">equipment.request.kanban</field>
+            <field name="model">allocation.request</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="state"/>
+                    <field name="color"/>
+                    <field name="priority"/>
+                    <field name="equipment_id"/>
+                    <field name="request_user_id"/>
+                    <field name="approved_by"/>
+                    <field name="category_id"/>
+                    <field name="message_needaction_counter"/>
+                    <templates>
+                        <t t-name="kanban-tooltip">
+                            <ul class="oe_kanban_tooltip">
+                                <li>
+                                    <b>Category:</b>
+                                    <field name="category_id"/>
+                                </li>
+                                <li>
+                                    <b>Assigned to:</b>
+                                    <field name="request_user_id"/>
+                                </li>
+                                <li>
+                                    <b>Allocated by:</b>
+                                    <field name="approved_by"/>
+                                </li>
+
+                            </ul>
+                        </t>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click oe_semantic_html_override">
+                                <div class="o_dropdown_kanban dropdown">
+
+                                    <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-bars fa-lg"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <t t-if="widget.editable">
+                                            <li>
+                                                <a type="edit">Edit...</a>
+                                            </li>
+                                        </t>
+                                        <t t-if="widget.deletable">
+                                            <li>
+                                                <a type="delete">Delete</a>
+                                            </li>
+                                        </t>
+                                        <li>
+                                            <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="oe_kanban_content" tooltip="kanban-tooltip">
+                                    <div>
+                                        <b>
+                                            <field name="name"/>
+                                        </b>
+                                        <br/>
+                                        <span name="request_user_id" t-if="record.request_user_id.raw_value">
+                                            <b>Assigned to: </b>
+                                            <field name="request_user_id"/>
+                                            <br/>
+                                        </span>
+                                        <span class="oe_grey" t-if="record.equipment_id.raw_value">
+                                            <b>Equipment: </b>
+                                            <field name="equipment_id"/>
+                                            <br/>
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_footer_left" style="margin-top:2px;">
+                                        <t t-if="record.message_needaction_counter.raw_value">
+                                            <span class='oe_kanban_mail_new' title='Unread Messages'>
+                                                <i class='fa fa-comments'/>
+                                                <t t-raw="record.message_needaction_counter.raw_value"/>
+                                            </span>
+                                        </t>
+                                        <span t-if="record.category_id.raw_value">
+                                            <b>Category: </b>
+                                            <field name="category_id"/>
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <img t-att-src="kanban_image('res.users', 'image_small', record.request_user_id.raw_value)" t-att-title="record.request_user_id.value" width="24" height="24" class="oe_kanban_avatar pull-right" t-att-alt="record.request_user_id.value"/>
+                                        <div class="pull-left" groups="base.group_user">
+                                            <field name="priority" widget="priority"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="oe_clear"></div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_view_form" model="ir.ui.view">
+            <field name="name">equipment.allocation.form</field>
+            <field name="model">allocation.request</field>
+            <field name="arch" type="xml">
+                <form string="Allocation Request">
+                    <header>
+                        <button string="Set to New" name="set_draft" type="object" states="cancel,returned" confirm="Are you sure you want to move this request to new ?" class="oe_highlight" groups="equipment_allocations.group_equipment_user"/>
+                        <button string="Approve" name="set_approved" type="object" states="new" confirm="Are you sure you want to approve this request?" class="oe_highlight" groups="equipment_allocations.group_equipment_user"/>
+                        <button string="Allocate" name="set_allocated" type="object" states="approved" class="oe_highlight" confirm="Are you sure you want to allocate this request?" groups="equipment_allocations.group_equipment_user"/>
+                        <button string="Return" name="set_returned" type="object" states="allocated" class="oe_highlight" confirm="Are you sure you want to return this request?" groups="equipment_allocations.group_equipment_user"/>
+                        <button string="Replace" name="%(replace_equipment_wizard_action)d" type="action" attrs="{'invisible':['|',('state','!=','allocated'),('type','=','on-demand')]}" groups="equipment_allocations.group_equipment_user" />
+                        <button string="Cancel" name="%(wk_reason_wizard_action)d" type="action" states="new,approved"/>
+                        <button string="Cancel" name="%(wk_reason_wizard_action)d" type="action" states="allocated" groups="equipment_allocations.group_equipment_user"/>
+                        <field name="state" widget="statusbar" statusbar_visible="new,approved,allocated,returned"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Subject"/>
+                            <h1>
+                                <field name="name" placeholder="Request for laptop"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Equipment Details" name="wk_equipment_detail">
+                                <field name="type" widget="radio" options="{'horizontal':True}" readonly="1"/>
+                                <field name="category_id" options="{'no_create_edit': True, 'no_open':True,'no_create':True}"/>
+                                <field name="equipment_id" context="{'default_category_id':category_id}" options="{'no_create_edit': True, 'no_open':True,'no_create':True}"/>
+                                <field name="equipment_ids" invisible="1"/>
+                                <field name="product_id" groups="equipment_allocations.group_equipment_officer"/>
+<field name="equipment_qty" />
+                                <field name="equipment_model" />
+                                <field name="equipment_sno" />
+                                <field name="equipment_mac_add" />
+                                <field name="equipment_tag" />
+                                <field name="equipment_waranty_date" />
+                                <field name="equipment_status" />
+                                <field name="equipment_delivered_date"  attrs="{'invisible':[('state','=','new')],'required':[('state','=','approved')],'readonly':[('state','in',['new','allocated','returned','cancel'])]}"/>
+                                <field name="source_location" attrs="{'invisible':[('state','=','new')],'required':[('state','=','approved')],'readonly':[('state','in',['new','allocated','returned','cancel'])]}"/>
+                                <field name="dest_location" attrs="{'invisible':[('state','=','new')],'required':[('state','=','approved')],'readonly':[('state','in',['new','allocated','returned','cancel'])]}" />
+                            </group>
+                            <group string="Employee Information" name="wk_employee_detail">
+                                <!--<field name="request_user_id" string="Assigned To" options="{'no_create_edit': True, 'no_open':True,'no_create':True}"/>-->
+                                <field name="request_employee" string="Assign To" options="{'no_create_edit': True, 'no_open':True,'no_create':True}"/>
+                                <field name="req_emp_id" string="ID"/>
+                                <field name="req_emp_location" string="Location"/>
+                                <field name="approved_by" string="Approved By" readonly="1" attrs="{ 'invisible':[('approved_by','=',False)] }"/>
+                                <field name="return_to" string="Return To" readonly="1" attrs="{ 'invisible':[('return_to','=',False)] }" />
+                                <field name="rejected_by" string="Cancelled By" readonly="1" attrs="{ 'invisible':[('rejected_by','=',False)] }" />
+                                <field name="create_uid" string="Created By" readonly="1" attrs="{ 'invisible':[('create_uid','=',False)] }"/>
+                                <field name="create_date" string="Created Date" readonly="1" attrs="{ 'invisible':[('create_date','=',False)] }"/>
+                                <field name="archive" invisible="1"/>
+                                    <field name="request_date" string="Scheduled Date" attrs="{ 'invisible':[('request_date','=',False)] }"/>
+                                <field name="close_date" readonly="1" attrs="{ 'invisible':[('close_date','=',False)] }"/>
+                                <label for="duration" attrs="{ 'invisible':[('duration','in',[False,0.0])] }"/>
+                                <div class="o_row" attrs="{ 'invisible':[('duration','in',[False,0.0])] }">
+                                    <field name="duration" class="oe_inline" readonly="1" widget="float_time"/> hours
+                                </div>
+                                <field name="priority" widget="priority"/>
+                            </group>
+                        </group>
+                        <field name='description' placeholder="Internal Note ......."/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_view_tree" model="ir.ui.view">
+            <field name="name">equipment.allocation.tree</field>
+            <field name="model">allocation.request</field>
+            <field name="arch" type="xml">
+                <tree string="allocation Request" decoration-bf="message_needaction==True" decoration-danger="state == 'cancel'" decoration-success="state == 'returned'" decoration-info="state == 'new'" decoration-warning="state in ['allocated','approved']">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="req_emp_id" string="ID"/>
+                    <field name="request_employee" string="Full name"/>
+                    <field name="req_emp_location" string="Location"/>
+                    <field name="equipment_id" string="Product"/>
+<field name="equipment_qty" />
+                    <field name="equipment_model" string="Model"/>
+                    <field name="equipment_sno" string="SNo."/>
+                    <field name="equipment_mac_add" string="MAC Add."/>
+                    <field name="equipment_tag" string="Tag"/>
+                    <field name="equipment_delivered_date" string="Delivered date"/>
+                    <field name="equipment_waranty_date" string="Warranty date"/>
+                    <field name="equipment_status" string="Status"/>
+                    <field name="priority" widget="priority"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_view_form_access" model="ir.ui.view">
+            <field name="name">equipment.allocation.form</field>
+            <field name="model">allocation.request</field>
+            <field name="inherit_id" ref="hr_equipment_allocation_request_view_form"/>
+            <field name="groups_id" eval="[(4, ref('equipment_allocations.group_equipment_user'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="attributes">
+                    <attribute name="readonly">False</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="wk_hr_equipment_category_view_form" model="ir.ui.view">
+            <field name="name">equipment.category.form</field>
+            <field name="model">maintenance.equipment.category</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_category_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="placeholder">e.g. Laptop</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="wk_maintenance_request_view_form_inherit_hr" model="ir.ui.view">
+            <field name="name">maintenance.request.view.form.inherit.hr</field>
+            <field name="model">maintenance.request</field>
+            <field name="inherit_id" ref="hr_maintenance.maintenance_request_view_form_inherit_hr"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_id']" position="replace">
+                    <field name="owner_user_id" string="Created By"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="wk_maintenance_equipment_view_tree_inherit_hr" model="ir.ui.view">
+            <field name="name">maintenance.equipment.view.form.inherit.hr</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="hr_maintenance.maintenance_equipment_view_tree_inherit_hr"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_id']" position="replace">
+                    <field name="owner_user_id" string="Employee"/>
+                </xpath>
+                <field name="department_id" position="replace"/>
+                <field name="category_id" position="after">
+                    <field name="purchase_date"/>
+                    <field name="warranty_date" string="Expired on"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="wk_hr_maintyenance_equipment_view_kanban" model="ir.ui.view">
+            <field name="name">equipment.kanban</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="hr_maintenance.maintenance_equipment_view_kanban_inherit_hr"/>
+            <field name="arch" type="xml">
+                <xpath expr="//img[@t-att-title='record.employee_id.value']" position='replace'>
+                    <img t-att-src="kanban_image('res.users', 'image_small', record.owner_user_id.raw_value)" t-att-title="record.owner_user_id.value" t-att-alt="record.owner_user_id.value" width="27" height="27" class="oe_kanban_avatar"/>
+                </xpath>
+                <div t-if="record.department_id.value" position="replace">
+                    <div t-if="record.department_id.value">
+                        <b>Department: </b>
+                        <field name="department_id"/>
+                    </div>
+                </div>
+                <div t-if="!record.employee_id.raw_value" position="replace">
+                </div>
+            </field>
+        </record>
+
+        <record id="wk_hr_equipment_view_kanban" model="ir.ui.view">
+            <field name="name">equipment.kanban</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_view_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='owner_user_id']" position="after">
+                    <field name="allocation_ids"/>
+                    <field name="allocation_open_count"/>
+                    <field name="warranty_date"/>
+                </xpath>
+                <xpath expr="//field[@name='serial_no']/../.." position="after">
+                    <div t-if="record.partner_ref.raw_value">
+                        <b>System Tag: </b>
+                        <field name="partner_ref"/>
+                    </div>
+                </xpath>
+                <xpath expr="//div[@class='oe_kanban_bottom_left']" position="replace">
+                    <div class="oe_kanban_bottom_left">
+                        <div class="badge badge-info" t-if="record.allocation_open_count.raw_value and !record.owner_user_id.raw_value">
+                            Allocated
+                        </div>
+
+                        <div class="badge badge-danger" t-if="record.maintenance_open_count.raw_value">
+                            <t t-raw="record.maintenance_open_count.raw_value"/> Request
+                        </div>
+                        <div class="badge badge-secondary" t-if="record.next_action_date.raw_value">
+                            <t t-raw="moment(record.next_action_date.raw_value).format('MMMM Do')"/>
+                        </div>
+                    </div>
+                </xpath>
+
+                <xpath expr="//div[@class='o_kanban_record_bottom']" position="after">
+                    <t t-if="record.warranty_date.raw_value and record.warranty_date.raw_value lt (new Date())">
+                        <div class="oe_kanban_footer_left mt4 badge badge-danger" style="margin: 2px;">
+                            Warranty Expired</div>
+                    </t>
+                    <t t-if="record.warranty_date.raw_value and record.warranty_date.raw_value gt (new Date())">
+                        <div class="oe_kanban_footer_left mt4 badge badge-success" style="margin: 2px;">
+                            <i>Warranty Expires on: <field name="warranty_date"/>
+                            </i>
+                        </div>
+                    </t>
+                    <t t-if="record.owner_user_id.raw_value">
+                        <div class="oe_kanban_footer_left mt4 badge badge-primary" style="margin: 2px;">
+                            <i>Permanently Allocated to  <field name="owner_user_id"/>
+                            </i>
+                        </div>
+                    </t>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_action" model="ir.actions.act_window">
+            <field name="name">Allocation Requests</field>
+            <field name="res_model">allocation.request</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
+            <field name="view_id" ref="hr_equipment_allocation_request_view_tree"/>
+            <field name="context">{'default_request_user_id': uid,'search_default_on_demand_type':1,'search_default_today_date':1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a new allocation request.
+                </p>
+                <p>
+                    Follow the process of the request and communicate with the collaborator.
+                </p>
+            </field>
+        </record>
+
+        <record id="wk_stockable_products" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="view_type">form</field>
+            <field name="context">{'default_type': 'product'}</field>
+            <field name="search_view_id" ref="product.product_search_form_view"/>
+            <field name="view_id" eval="False"/>
+            <!-- Force empty -->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to define a new product.
+                </p>
+                <p>
+                    You must define a product for everything you sell, whether it's
+                    a physical product, a consumable or a service you offer to customers.
+                </p>
+                <p>
+                    The product form contains information to simplify the sale
+                    process: price, notes in the quotation, accounting data, procurement methods, etc.
+                </p>
+            </field>
+        </record>
+
+        <record id="hr_equipment_allocation_request_calender" model="ir.actions.act_window">
+            <field name="name">Allocation Requests</field>
+            <field name="res_model">allocation.request</field>
+            <field name="view_mode">calendar,kanban,tree,form,pivot</field>
+            <field name="view_id" ref="hr_equipment_allocation_view_calendar"/>
+        </record>
+
+        <record id="maintenance_action_partner_supplier_form" model="ir.actions.act_window">
+            <field name="name">Vendors</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('supplier','=',True)]</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'default_customer': 0,'default_supplier': 1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a contact in your address book.
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to
+                    a supplier: discussions, history of purchases, documents, etc.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="maintenance.menu_m_dashboard" name="Dashboard" parent="maintenance.menu_maintenance_title" groups="equipment_allocations.group_equipment_user" action="maintenance.maintenance_dashboard_action" sequence="0"/>
+
+        <menuitem id="maintenance.menu_equipment_form" name="Equipments" parent="maintenance.menu_maintenance_title" action="maintenance.hr_equipment_action" groups="equipment_allocations.group_equipment_user" sequence="1"/>
+
+        <menuitem id="maintenance.menu_m_request" name="Maintenance" parent="maintenance.menu_maintenance_title" groups="maintenance.group_equipment_manager,base.group_user" sequence="3"/>
+
+        <menuitem id="menu_allocation_request" name="Allocation" parent="maintenance.menu_maintenance_title" groups="base.group_user" sequence="2"/>
+
+        <menuitem id="menu_allocation_request_form" name="Allocation Requests" parent="menu_allocation_request" action="hr_equipment_allocation_request_action" groups="base.group_user" sequence="1"/>
+
+        <menuitem id="menu_allocation_request_calender" name="Allocation Calender" parent="menu_allocation_request" action="hr_equipment_allocation_request_calender" groups="base.group_user" sequence="1"/>
+
+        <menuitem id="menu_products" name="Products" parent="maintenance.menu_maintenance_title" groups="equipment_allocations.group_equipment_officer" sequence="4"/>
+
+        <menuitem id="hr_menu_products" name="Stockable Products" parent="menu_products" action="wk_stockable_products" groups="equipment_allocations.group_equipment_officer" sequence="1"/>
+
+        <menuitem id="hr_menu_category" name="Products Categories" parent="menu_products" action="product.product_category_action_form" groups="equipment_allocations.group_equipment_officer" sequence="2"/>
+
+        <menuitem id="menu_maintenance_vendors" name="Vendors" parent="maintenance.menu_maintenance_configuration" action="maintenance_action_partner_supplier_form" groups="maintenance.group_equipment_manager" sequence="1"/>
+    </data>
+</odoo>

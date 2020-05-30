@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <data>
+        <record id="replace_equipment_form_wizard" model="ir.ui.view">
+            <field name="name">replace equipment wizard</field>
+            <field name="model">replace.equipment.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Replace Equipment">
+                    <group>
+                        <field name="category_id" invisible="1"/>
+                        <field name="equipment_id" required="1" options="{'no_create_edit': True, 'no_open':True,'no_create':True}"/>
+                    </group>
+                    <separator string="Reason" colspan="6"/>
+                    <field name="reason" colspan="4" nolabel="1" required="1" />
+                    <newline/>
+                    <separator colspan="6"/>
+                    <footer>
+                        <button name="replace_equipment" string="Replace Now" type="object" class="oe_highlight"/>
+                        <button special="cancel" class="oe_highlight" string="Cancel" />
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="replace_equipment_wizard_action" model="ir.actions.act_window">
+            <field name="name">replace equipment wizard</field>
+            <field name="res_model">replace.equipment.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="replace_equipment_form_wizard"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<report id="report_allocation_request"
+			model="allocation.request" string="Print Allocation Request"
+			report_type="qweb-pdf"
+			name="equipment_allocations.allocation_req"
+			file="equipment_allocations.allocation_req" />
+
+		<template id="allocation_req">
+				<t t-call="web.html_container">
+				<t t-call="web.external_layout">
+			<t t-foreach="docs" t-as="doc">
+
+					<div class="page">
+						<div class="text-left">
+							<h4>
+								<strong>
+									<p>Asset Handover Form</p>
+								</strong>
+							</h4>
+						</div>
+						<table class="table table-sm">
+                                                  <t t-if='doc.request_employee.company_id.name'>
+							<tr class="border-black o_partner_company_name">
+								<td>
+									<strong>Company Name</strong>
+								</td>
+								<td>
+									<span t-field="doc.request_employee.company_id.name" />
+								</td>
+							</tr>
+                                                      </t> 
+                                                  <t t-if='doc.request_employee.company_id.phone'>
+							<tr class="border-black o_partner_company_contact">
+								<td>
+									<strong>Company Contact No.</strong>
+								</td>
+								<td>
+									<span t-field="doc.request_employee.company_id.phone" />
+								</td>
+							</tr>
+                                                      </t> 
+                                                 
+                                                  <t t-if='doc.request_employee'>
+							<tr class="border-black o_partner_employee">
+								<td>
+									<strong>Name of Employee</strong>
+								</td>
+								<td>
+									<span t-field="doc.request_employee" />
+								</td>
+							</tr></t>
+                                                 
+                                                 
+                                                  <t t-if='doc.request_employee.department_id'>
+							<tr class="border-black o_partner_department">
+								<td>
+									<strong>Department(Where applicable)</strong>
+								</td>
+								<td>
+									<span t-field="doc.request_employee.department_id" />
+								</td>
+							</tr></t>
+                                                  <t t-if='doc.request_date'>
+							<tr class="border-black o_partner_handover">
+								<td>
+									<strong>Handover Date</strong>
+								</td>
+								<td>
+									<span t-field="doc.request_date" />
+								</td>
+							</tr></t>
+                                                  <t t-if='doc.request_date'>
+							<tr class="border-black o_partner_handover_by">
+								<td>
+									<strong>Handover by</strong>
+								</td>
+								<td>
+									<span t-field="doc.request_date" />
+								</td>
+							</tr>
+                                                       </t>
+							<tr class="border-black o_partner_handover_by">
+								<td>
+									<strong>Instructions</strong>
+								</td>
+								<td>
+									<p>Please find below for the assets handed over to you, to support you to carrying out your project or work in the most proficient manner</p>
+								</td>
+							</tr>
+						</table>
+						<div class="text-left">
+								<strong>
+									<p>Asset Handed Over</p>
+								</strong>
+						</div>
+
+						<table class="table table-bordered">
+							<tr>
+								<td>
+									<strong>Asset name and Number</strong>
+								</td>
+								<td>
+									<strong>Asset Description</strong>
+								</td>
+								<td>
+									<strong>Quantity</strong>
+								</td>
+								<td>
+									<strong>Remarks</strong>
+								</td>
+							</tr>
+
+								<tr>
+									<td class="text-center">
+										<span t-field="doc.product_id.name" />
+									</td>
+									<td class="text-center">
+										<span t-esc="doc.description" />
+									</td>
+									<td class="text-center">
+										<span t-esc="doc.equipment_qty" />
+									</td>
+									<td class="text-center">
+										<span t-esc="doc.state" />
+									</td>
+								</tr>
+						</table>
+						<br />
+						<table class="table table-responsive">
+                                                    <t t-if='doc.approved_by'>
+							<tr class="border-black o_partner_auth">
+								<td>
+									<strong>Authorised Signature(Approver):</strong>
+								</td>
+								<td>
+									<strong>____________  <span t-field="doc.approved_by" /></strong>
+								</td>
+							</tr></t>
+                                                    <t t-if='doc.approved_by'>
+								<tr class="border-black o_partner_auth_by">
+								<td>
+									<strong>Authorised Signature(Responsible Person)</strong>
+								</td>
+								<td>
+									<strong>____________  <span t-field="doc.approved_by" /></strong>
+								</td>
+							</tr></t>
+							<tr class="border-black o_partner_test">
+								<td>
+									<strong>Text</strong>
+								</td>
+								<td>
+									<strong>I hereby acknowledge that i have received the above mentioned assets. I understand that this asset belongs to the company and is under my possesion while carrying out the work. I hereby assure that i will take care of assets of the company tot he best possible extent.</strong>
+								</td>
+							</tr>
+                                                    <t t-if='doc.request_employee'>
+							<tr class="border-black o_partner_resp">
+								<td>
+									<strong>Authorised Signature(Person Requesting)</strong>
+								</td>
+								<td>
+									<strong>____________  <span t-field="doc.request_employee" /></strong>
+								</td>
+							</tr></t>
+
+						</table>
+
+					</div>
+				</t>
+			</t>
+</t>
+		</template>
+	</data>
+</odoo>
+

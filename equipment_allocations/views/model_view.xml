@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+        <!--Production Form -->
+
+        <record model="ir.ui.view" id="equip_view_form_ga">
+			<field name="name">equip.form.view</field>
+			<field name="model">maintenance.equipment</field>
+			<field name="inherit_id" ref='maintenance.hr_equipment_view_form' />
+			<field name="arch" type="xml">
+                <xpath expr="//field[@name='location']" position="after">
+                    <field name="po_no" string="PO No." />
+                </xpath>
+                <xpath expr="//notebook/page[2]/group/group[1]/field[@name='serial_no']" position="after">
+                    <field name="box_no" />
+                    <field name="mac_add" />
+                    <field name="tag" />
+                </xpath>
+                 <xpath expr="//notebook/page[2]/group/group[2]/field[@name='warranty_date']" position="after">
+                    <field name="status" />
+                </xpath>
+            </field>
+        </record>
+
+        <!--Production Tree-->
+
+        <record id="equip_tree_view_ga" model="ir.ui.view">
+			<field name="name">equip.tree.view</field>
+			<field name="model">maintenance.equipment</field>
+			<field name="arch" type="xml">
+				<tree string="Employee">
+                    <field name="box_no" string="Box No."/>
+                    <field name="name" string="Product"/>
+                    <field name="model" string="Model"/>
+                    <field name="serial_no" string="SN"/>
+                    <field name="mac_add" string="MAC Address"/>
+                    <field name="tag" string="Tag"/>
+                    <field name="partner_id" string="Delivered Supplier"/>
+                    <field name="warranty_date" string="Waranty date"/>
+                    <field name="po_no" string="PO"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Allocation History Form-->
+
+        <record model="ir.ui.view" id="equip_allocation_history_form">
+			<field name="name">equip.form.history</field>
+			<field name="model">allocation.history</field>
+			<field name="arch" type="xml">
+                <form string="Allocation History">
+                    <header>
+                        <field name="status" widget="statusbar"
+							statusbar_visible="allocated,reallocated,return,replaced" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="Equipment Information">
+                                <field name="equipment_id" string="Product" readonly="1"/>
+                                <field name="equip_box" />
+                                <field name="equip_model" />
+                                <field name="equip_mac" />
+                                <field name="equip_tag" />
+                                <field name="assingned_by" string="Responsible" readonly="1"/>
+                                <field name="assinged_date" string="Date" readonly="1"/>
+                            </group>
+                            <group string="Employee Information">
+                                <field name="employee_id" string="Assigned to" readonly="1"/>
+                                <field name="emp_id" />
+                                <field name="src_location" string="Source Location" readonly="1"/>
+                                <field name="dest_location" string="Destination Location" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Allocation History Tree-->
+
+        <record id="equip_allocation_tree_view" model="ir.ui.view">
+			<field name="name">equip.history.tree.view</field>
+			<field name="model">allocation.history</field>
+			<field name="arch" type="xml">
+				<tree string="Allocation History">
+                    <field name="equip_box" string="Box No."/>
+                    <field name="equipment_id" string="Product"/>
+                    <field name="equip_model" string="Model"/>
+                    <field name="equip_mac" string="MAC Add."/>
+                    <field name="equip_tag" string="Tag"/>
+                    <field name="emp_id" string="ID"/>
+                    <field name="employee_id" string="Full name"/>
+                    <field name="assingned_by" string="Responsible"/>
+                    <field name="assinged_date" string="Date"/>
+                    <field name="src_location" string="Source Location"/>
+                    <field name="dest_location" string="Destination Location"/>
+                    <field name="status" string="Status"/>
+                </tree>
+            </field>
+        </record>
+
+        
+        <!--Production-->
+
+        <record model="ir.actions.act_window"
+			id="action_equipments_sit">
+			<field name="name">Productions</field>
+			<field name="res_model">maintenance.equipment</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+        <record model="ir.actions.act_window.view"
+			id="act_equip_tree_view">
+			<field eval="1" name="sequence" />
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="equipment_allocations.equip_tree_view_ga" />
+			<field name="act_window_id" ref="action_equipments_sit" />
+		</record>
+
+		<record model="ir.actions.act_window.view"
+			id="act_equip_form_view">
+			<field eval="3" name="sequence" />
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="equipment_allocations.equip_view_form_ga" />
+			<field name="act_window_id" ref="action_equipments_sit" />
+		</record>
+
+        <!--History Action-->
+
+        <record model="ir.actions.act_window"
+			id="action_equipments_allocation_history">
+			<field name="name">History</field>
+			<field name="res_model">allocation.history</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+        <menuitem id="menu_inherit_employee_sit" parent="maintenance.menu_maintenance_title"
+			name="Reports" sequence="2" />
+      
+        <menuitem id="child_menu_inherit_production_sit" parent="menu_inherit_employee_sit"
+			name="Production" action="action_equipments_sit" sequence="6" />
+        <menuitem id="child_menu_inherit_deliverable_sit" parent="menu_inherit_employee_sit"
+			name="Delivered Customer &amp; Production" action="hr_equipment_allocation_request_action" sequence="9" />
+        <menuitem id="child_menu_inherit_history_sit" parent="menu_inherit_employee_sit"
+			name="History" action="action_equipments_allocation_history" sequence="12" />
+
+    </data>
+</odoo>

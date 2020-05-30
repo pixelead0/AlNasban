@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <data noupdate="1">
+      <record id="email_equipment_allocation_request" model="mail.template">
+            <field name="name"> [WEBKUL] Equipment Allocation Request</field>
+            <field name="email_from">no-reply@webkul.com</field>
+            <field name="subject">Equipment Allocation Request:- ${object.name}</field>
+            <field name="email_to">${object.category_id.technician_user_id.email}</field>
+            <field name="email_cc"></field>
+            <field name="model_id" ref="model_allocation_request"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+                <p>Hello,</p>
+                    <p>
+                        An allocation request has been created for a set of  <strong>
+                        % if object.equipment_id:
+                            ${object.equipment_id.display_name}
+                        % else:
+                            ${object.category_id.name} 
+                        % endif
+                        </strong>
+                        by <strong>${object.request_user_id.name}
+                        % if object.request_user_id.employee_ids and object.request_user_id.sudo().employee_ids[0].department_id:
+                            (${object.request_user_id.sudo().employee_ids[0].department_id.name})
+                        % endif
+                        </strong>
+                            for the scheduled date <strong>${object.get_date(object.request_date)} ${object.get_time(object.request_date)}</strong>.
+                    </p>
+                </div>
+            ]]></field>
+        </record>
+
+        <record id="email_equipment_replace" model="mail.template">
+            <field name="name"> [WEBKUL] Equipment Replace</field>
+            <field name="email_from">no-reply@webkul.com</field>
+            <field name="subject">Equipment Replaced</field>
+            <field name="email_to">${object.request_user_id.email}</field>
+            <field name="email_cc"></field>
+            <field name="model_id" ref="model_allocation_request"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+                <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Hello ${object.request_user_id.name},</p>
+                    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+                       Your previous equipment ${ctx['old_equipment']} has been replaced by an another Equipment named ${object.equipment_id.display_name}. Now, ${object.equipment_id.display_name} is assigned to you on the permanent basis.
+                    </p>
+                    % if ctx.get("reason")
+                        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+                            <b style="font-weight:bold;">Reason</b> for replacing equipment is<br> ${ctx['reason']}
+                            <b style="font-weight:bold;"><br></b></p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;"><b style="font-weight:bold;"><br></b></p>
+                    % endif
+                </div>
+            ]]></field>
+        </record>
+
+         <record id="email_equipment_allocation_approve" model="mail.template">
+            <field name="name"> [WEBKUL] Equipment allocation request approval</field>
+            <field name="email_from">no-reply@webkul.com</field>
+            <field name="subject">Your Request for ${object.category_id.name} has been approved</field>
+            <field name="email_to">${object.request_user_id.email}</field>
+            <field name="email_cc"></field>
+            <field name="model_id" ref="model_allocation_request"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+                <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Hello ${object.request_user_id.name},</p>
+                    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+                    % if object.type == "on-demand" and object.state == "approved":
+                        Your request for a set of ${object.equipment_id.display_name} on given scheduled date which is ${object.get_date(object.request_date)} ${object.get_time(object.request_date)} has been approved.
+                    % endif
+                     % if object.type == "on-demand" and object.state == "allocated":
+                        ${object.equipment_id.display_name} has been allocated to you as per your request.
+                    % endif
+                    % if object.type == "permanent" and object.state == "allocated":
+                        We have assigned you an equipment named ${object.equipment_id.display_name} on permanent basis.
+                    % endif
+                    </p>
+                </div>
+            ]]></field>
+        </record>
+
+        <record id="email_allocation_cancel" model="mail.template">
+            <field name="name"> [WEBKUL] Equipment Allocation Cancel</field>
+            <field name="email_from">no-reply@webkul.com</field>
+            <field name="subject">Equipment Request Cancel</field>
+            <field name="email_to">${object.request_user_id.email}</field>
+            <field name="email_cc"></field>
+            <field name="model_id" ref="model_allocation_request"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+                <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Hello ${object.request_user_id.name},</p>
+                    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+                       Your allocation request for a set of <strong>
+                        % if object.equipment_id:
+                            ${object.equipment_id.display_name}
+                        % else:
+                            ${object.category_id.name} 
+                        % endif
+                        </strong> has been cancelled.
+                    </p>
+                    % if ctx.get("reason")
+                        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+                            <b style="font-weight:bold;">Reason</b> for cancelling this request is stated below:<br> ${ctx['reason']}
+                            <b style="font-weight:bold;"><br></b></p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;"><b style="font-weight:bold;"><br></b></p>
+                    % endif
+                </div>
+            ]]></field>
+        </record>
+    </data>
+</odoo>
