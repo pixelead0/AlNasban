@@ -680,6 +680,7 @@ class EquipmentHIstory(models.Model):
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
     allocated_euipments_ids = fields.One2many('hr.equipment.allocation','allocated_id')
+    employee_number = fields.Char('Employee Number')
 
 class EquipmentAllocated(models.Model):
     _name = 'hr.equipment.allocation'
