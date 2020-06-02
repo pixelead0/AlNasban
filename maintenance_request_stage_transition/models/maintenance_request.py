@@ -44,6 +44,7 @@ class MaintenanceRequest(models.Model):
                                'price_unit':self.equipment_id.product_id.standard_price,'product_uom':self.equipment_id.product_id.uom_id.id}))
             repair_order = self.env['repair.order'].create({'product_id':self.equipment_id.product_id.id,
                                                             'product_qty':1,
+                                                            'maintenance_code':self.code,
                                                             'product_uom':self.equipment_id.product_id.uom_id.id,
                                                             'fees_lines':rec})
 
