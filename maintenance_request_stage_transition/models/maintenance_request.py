@@ -37,7 +37,19 @@ class MaintenanceRequest(models.Model):
             res["arch"] = etree.tostring(doc, encoding="unicode")
         return res
 
+    def create_repair_order(self):
+        rec = []
+        if self.maintenance_required == 'y':
+            rec.append((0, 0, {'product_id': self.equipment_id.product_id.id,'name':self.equipment_id.product_id.name,
+                               'price_unit':self.equipment_id.product_id.standard_price,'product_uom':self.equipment_id.product_id.uom_id.id}))
+            repair_order = self.env['repair.order'].create({'product_id':self.equipment_id.product_id.id,
+                                                            'product_qty':1,
+                                                            'product_uom':self.equipment_id.product_id.uom_id.id,
+                                                            'fees_lines':rec})
+
+
     def set_maintenance_stage(self):
+        self.create_repair_order()
         if not self.env.context.get('next_stage_id'):
             return {}
         return self._set_maintenance_stage(

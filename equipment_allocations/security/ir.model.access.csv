@@ -1,0 +1,20 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_allocation_system_user,allocation.request system user,model_allocation_request,base.group_user,1,1,1,0
+access_allocation_request_user,request.user,model_allocation_request,equipment_allocations.group_equipment_user,1,1,1,0
+access_maintenance_system_user,equipment.request system user,maintenance.model_maintenance_request,equipment_allocations.group_equipment_user,1,1,1,0
+access_maintenance_team_user,maintenance.team.user,maintenance.model_maintenance_team,equipment_allocations.group_equipment_user,1,0,0,0
+access_stock_location_equipment,stock.location.equipment,stock.model_stock_location,equipment_allocations.group_equipment_user,1,0,0,0
+access_stock_move_equipment,stock.move.equipment,stock.model_stock_move,equipment_allocations.group_equipment_user,1,0,0,0
+access_stock_warehouse_orderpoint_equipment,stock.warehouse.orderpoint.equipment,stock.model_stock_warehouse_orderpoint,equipment_allocations.group_equipment_user,1,0,0,0
+access_maintenance_equipment_officer,maintenance.maintenance.equipment,maintenance.model_maintenance_equipment,equipment_allocations.group_equipment_officer,1,1,1,0
+access_allocation_request_admin_user,request.admin.user,model_allocation_request,maintenance.group_equipment_manager,1,1,1,1
+access_maintenance_system_manager,equipment.request system manager,maintenance.model_maintenance_request,maintenance.group_equipment_manager,1,1,1,1
+access_maintenance_team_maanger,maintenance.team.manager,maintenance.model_maintenance_team,maintenance.group_equipment_manager,1,1,1,1
+access_partner_maanger,res.partner.manager,base.model_res_partner,maintenance.group_equipment_manager,1,1,1,0
+view_allocation_history,allocation.history,model_allocation_history,hr.group_hr_manager,1,1,1,1
+view_allocation_history,allocation.history,model_allocation_history,base.group_user,1,1,1,1
+view_equipment_history,equipment.history,model_equipment_history,hr.group_hr_manager,1,1,1,1
+view_equipment_history,equipment.history,model_equipment_history,base.group_user,1,1,1,1
+view_hr_equipment_allocation,hr.equipment.allocation,model_hr_equipment_allocation,hr.group_hr_manager,1,1,1,1
+view_hr_equipment_allocation,hr.equipment.allocation,model_hr_equipment_allocation,base.group_user,1,1,1,1
+

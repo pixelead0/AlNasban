@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <record id="view_maintenance_inteh" model="ir.ui.view">
+            <field name="name">maintenace.view.req</field>
+            <field name="model">maintenance.request</field>
+            <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='priority']" position="after">
+                    <field name="department"/>
+                    <field name="maintenance_required" widget="radio" string="Repair required"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <data noupdate="1">
+        <record model="res.partner" id="partner_1">
+            <field name="name">Bryon Jun</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">bryon-jun@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller1.jpg"/>
+        </record>
+
+        <record id="user_1" model="res.users">
+            <field name="partner_id" ref="partner_1"/>
+            <field name="login">bryon-jun@test.com</field>
+            <field name="password">webkul</field>
+            <field name="signature" type="xml">
+                <span>--<br/>+Bryon Jun</span>
+            </field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('base.group_partner_manager')])]"/>
+        </record>
+
+        <record model="res.partner" id="partner_2">
+            <field name="name">George Horne</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">george-horne@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller3.jpg"/>
+        </record>
+
+        <record id="user_2" model="res.users">
+            <field name="partner_id" ref="partner_2"/>
+            <field name="login">george-horne@test.com</field>
+            <field name="password">webkul</field>
+            <field name="signature" type="xml">
+                <span>--<br/>+George Horne</span>
+            </field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('base.group_partner_manager')])]"/>
+        </record>
+
+        <record model="res.partner" id="partner_3">
+            <field name="name">Maya Anand</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">maya-anand@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller2.jpg"/>
+        </record>
+
+        <record id="user_3" model="res.users">
+            <field name="partner_id" ref="partner_3"/>
+            <field name="login">maya-anand@test.com</field>
+            <field name="password">webkul</field>
+            <field name="signature" type="xml">
+                <span>--<br/>+Maya Anand</span>
+            </field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('base.group_partner_manager')])]"/>
+        </record>
+
+        <record model="res.partner" id="partner_4">
+            <field name="name">Ryan Solly</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">ryan-solly@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller4.jpg"/>
+        </record>
+
+        <record id="user_4" model="res.users">
+            <field name="partner_id" ref="partner_4"/>
+            <field name="login">ryan-solly@test.com</field>
+            <field name="password">webkul</field>
+            <field name="signature" type="xml">
+                <span>--<br/>+Ryan Solly</span>
+            </field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('base.group_partner_manager')])]"/>
+        </record>
+
+        <record model="res.partner" id="partner_5">
+            <field name="name">Blake Clancy</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">blake-clancy@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller5.jpg"/>
+        </record>
+
+        <record id="user_5" model="res.users">
+            <field name="partner_id" ref="partner_5"/>
+            <field name="login">blake-clancy@test.com</field>
+            <field name="password">webkul</field>
+            <field name="signature" type="xml">
+                <span>--<br/>+Blake Clancy</span>
+            </field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('base.group_partner_manager')])]"/>
+        </record>
+
+        <record model="res.partner" id="partner_6">
+            <field name="name">Molly Raws</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="customer" eval="False"/>
+            <field name="email">molly-raws@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller6.jpg"/>
+        </record>
+
+        <record id="user_6" model="res.users">
+            <field name="partner_id" ref="partner_6"/>
+            <field name="login">molly-raws@test.com</field>
+            <field name="password">webkul</field>
+            <field name="signature" type="xml">
+                <span>--<br/>+Molly Raws</span>
+            </field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="groups_id" eval="[(6,0,[ref('base.group_user'), ref('base.group_partner_manager')])]"/>
+        </record>
+        <record id="employee6" model="hr.employee">
+            <field name="user_id" ref="user_6"/>
+            <field name="name">Molly Raws</field>
+            <field name="department_id" ref="hr.dep_rd"/>
+            <field name="job_id" ref="hr.job_cto"/>
+            <field name="category_ids" eval="[(6, 0, [ref('hr.employee_category_4'), ref('hr.employee_category_3')])]"/>
+            <field name="work_location">Building 1, Second Floor</field>
+            <field name="work_phone">+3281813700</field>
+            <field name="work_email">molly-raws@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller6.jpg"/>
+        </record>
+
+        <record id="employee1" model="hr.employee">
+            <field name="user_id" ref="user_1"/>
+            <field name="name">Bryon Jun</field>
+            <field name="department_id" ref="hr.dep_ps"/>
+            <field name="job_id" ref="hr.job_cto"/>
+            <field name="category_ids" eval="[(6, 0, [ref('hr.employee_category_4'), ref('hr.employee_category_5')])]"/>
+            <field name="work_location">Building 1, Second Floor</field>
+            <field name="work_phone">+3281813700</field>
+            <field name="work_email">bryon-jun@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller1.jpg"/>
+        </record>
+
+        <record id="employee2" model="hr.employee">
+            <field name="user_id" ref="user_2"/>
+            <field name="name">George Horne</field>
+            <field name="department_id" ref="hr.dep_rd"/>
+            <field name="job_id" ref="hr.job_cto"/>
+            <field name="category_ids" eval="[(6, 0, [ref('hr.employee_category_4'), ref('hr.employee_category_3')])]"/>
+            <field name="work_location">Building 1, Second Floor</field>
+            <field name="work_phone">+3281813700</field>
+            <field name="work_email">george-horne@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller3.jpg"/>
+        </record>
+
+        <record id="employee3" model="hr.employee">
+            <field name="user_id" ref="user_3"/>
+            <field name="name">Maya Anand</field>
+            <field name="department_id" ref="hr.dep_ps"/>
+            <field name="job_id" ref="hr.job_cto"/>
+            <field name="category_ids" eval="[(6, 0, [ref('hr.employee_category_4'), ref('hr.employee_category_5')])]"/>
+            <field name="work_location">Building 1, Second Floor</field>
+            <field name="work_phone">+3281813700</field>
+            <field name="work_email">maya-anand@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller2.jpg"/>
+        </record>
+
+        <record id="employee4" model="hr.employee">
+            <field name="user_id" ref="user_4"/>
+            <field name="name">Ryan Solly</field>
+            <field name="department_id" ref="hr.dep_rd"/>
+            <field name="job_id" ref="hr.job_cto"/>
+            <field name="category_ids" eval="[(6, 0, [ref('hr.employee_category_4'), ref('hr.employee_category_3')])]"/>
+            <field name="work_location">Building 1, Second Floor</field>
+            <field name="work_phone">+3281813700</field>
+            <field name="work_email">ryan-solly@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller4.jpg"/>
+        </record>
+
+        <record id="employee5" model="hr.employee">
+            <field name="user_id" ref="user_5"/>
+            <field name="name">Blake Clancy</field>
+            <field name="department_id" ref="hr.dep_ps"/>
+            <field name="job_id" ref="hr.job_cto"/>
+            <field name="category_ids" eval="[(6, 0, [ref('hr.employee_category_4'), ref('hr.employee_category_5')])]"/>
+            <field name="work_location">Building 1, Second Floor</field>
+            <field name="work_phone">+3281813700</field>
+            <field name="work_email">blake-clancy@test.com</field>
+            <field name="image" type="base64" file="equipment_allocations/static/img/user/seller5.jpg"/>
+        </record>
+
+        <record id="equipment_monitor1" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.product_product_11"/>
+        </record>
+
+        <record id="equipment_monitor4" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.product_product_11"/>
+        </record>
+
+        <record id="equipment_monitor6" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.consu_delivery_03"/>
+        </record>
+
+        <record id="equipment_computer3" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.consu_delivery_03"/>
+        </record>
+
+        <record id="equipment_computer5" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.consu_delivery_03"/>
+        </record>
+
+        <record id="equipment_computer9" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.consu_delivery_03"/>
+        </record>
+
+        <record id="equipment_computer11" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.consu_delivery_03"/>
+        </record>
+
+        <record id="equipment_printer1" model="maintenance.equipment">
+            <field name="equipment_assign_to">other</field>
+            <field name="product_id" ref="product.consu_delivery_03"/>
+        </record>
+
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_monitor1')]"/>
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_monitor4')]"/>
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_monitor6')]"/>
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_computer3')]"/>
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_computer5')]"/>
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_computer9')]"/>
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_computer11')]"/>
+        <function model="maintenance.equipment" name="_onchange_equipment_assign_to" eval="[ref('equipment_printer1')]"/>
+
+        <record id="m_allocation_1" model="allocation.request">
+            <field name="name">Request For Monitor</field>
+            <field name="request_user_id" ref="base.user_4"/>
+            <field name="category_id" ref="equipment_monitor"/>
+            <field name="equipment_id" ref="equipment_monitor1"/>
+        </record>
+
+        <function model="allocation.request" name="set_approved" eval="[ref('equipment_allocations.m_allocation_1')]"/>
+        <function model="allocation.request" name="allocate_resource" eval="[ref('equipment_allocations.m_allocation_1')]"/>
+
+        <record id="m_allocation_2" model="allocation.request">
+            <field name="name">Allocated Monitor</field>
+            <field name="request_user_id" ref="base.user_2"/>
+            <field name="category_id" ref="equipment_monitor"/>
+            <field name="equipment_id" ref="equipment_monitor4"/>
+            <field name="type">permanent</field>
+        </record>
+
+        <function model="allocation.request" name="set_approved" eval="[ref('m_allocation_2')]"/>
+        <function model="allocation.request" name="allocate_resource" eval="[ref('m_allocation_2')]"/>
+
+        <record id="m_allocation_3" model="allocation.request">
+            <field name="name">Request For Printer</field>
+            <field name="request_user_id" ref="base.user_4"/>
+            <field name="category_id" ref="equipment_printer"/>
+            <field name="equipment_id" ref="equipment_printer"/>
+        </record>
+        <function model="allocation.request" name="set_approved" eval="[ref('m_allocation_3')]"/>
+
+        <record id="m_allocation_4" model="allocation.request">
+            <field name="name">Request For Computer</field>
+            <field name="request_user_id" ref="base.user_3"/>
+            <field name="category_id" ref="equipment_computer"/>
+            <field name="equipment_id" ref="equipment_computer11"/>
+        </record>
+
+        <function model="allocation.request" name="set_approved" eval="[ref('m_allocation_4')]"/>
+        <function model="allocation.request" name="allocate_resource" eval="[ref('m_allocation_4')]"/>
+    </data>
+</odoo>
