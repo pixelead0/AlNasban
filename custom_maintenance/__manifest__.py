@@ -7,7 +7,7 @@
     'category': 'Custom',
     'version': '12.0.1',
 
-    'depends': ['maintenance'],
+    'depends': ['maintenance','repair'],
 
     'data': [
         'views/model_view.xml',
