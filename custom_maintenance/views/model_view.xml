@@ -5,19 +5,19 @@
             <field name="model">maintenance.request</field>
             <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='priority']" position="after">
+                    <field name="department"/>
+                    <field name="maintenance_required" widget="radio" string="Repair required"/>
+                    <field name="have_repair" invisible="1"/>
+                </xpath>
                 <xpath expr="//sheet/div[1]" position="before">
                         	<div class="oe_button_box">
-							<button class="oe_stat_button" name="repair_view"
+							<button class="oe_stat_button" name="repair_view" attrs="{'invisible':[('have_repair','=',False)]}"
 								type="object" icon="fa-gavel">
 								<field string="Repair" name="repair_count"
 									widget="statinfo" />
 							</button>
 						</div>
-                </xpath>
-
-                <xpath expr="//field[@name='priority']" position="after">
-                    <field name="department"/>
-                    <field name="maintenance_required" widget="radio" string="Repair required"/>
                 </xpath>
             </field>
         </record>
@@ -27,8 +27,11 @@
             <field name="model">repair.order</field>
             <field name="inherit_id" ref="repair.view_repair_order_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='location_id']" position="after">
+                    <field name="have_maintenance" invisible="1" />
+                </xpath>
                <xpath expr="//sheet/div[@name='button_box']" position="inside">
-							<button class="oe_stat_button" name="maintenance_view"
+							<button class="oe_stat_button" name="maintenance_view" attrs="{'invisible':[('have_maintenance','=',False)]}"
 								type="object" icon="fa-gavel">
 								<field string="Maintenance" name="maintenance_count"
 									widget="statinfo" />

@@ -40,13 +40,16 @@ class MaintenanceRequest(models.Model):
     def create_repair_order(self):
         rec = []
         if self.maintenance_required == 'y':
-            rec.append((0, 0, {'product_id': self.equipment_id.product_id.id,'name':self.equipment_id.product_id.name,
-                               'price_unit':self.equipment_id.product_id.standard_price,'product_uom':self.equipment_id.product_id.uom_id.id}))
-            repair_order = self.env['repair.order'].create({'product_id':self.equipment_id.product_id.id,
-                                                            'product_qty':1,
-                                                            'maintenance_code':self.code,
-                                                            'product_uom':self.equipment_id.product_id.uom_id.id,
-                                                            'fees_lines':rec})
+            if self.have_repair == False:
+                rec.append((0, 0, {'product_id': self.equipment_id.product_id.id,'name':self.equipment_id.product_id.name,
+                                   'price_unit':self.equipment_id.product_id.standard_price,'product_uom':self.equipment_id.product_id.uom_id.id}))
+                repair_order = self.env['repair.order'].create({'product_id':self.equipment_id.product_id.id,
+                                                                'product_qty':1,
+                                                                'maintenance_code':self.code,
+                                                                'product_uom':self.equipment_id.product_id.uom_id.id,
+                                                                'have_maintenance':True,
+                                                                'fees_lines':rec})
+                self.have_repair = True
 
 
     def set_maintenance_stage(self):

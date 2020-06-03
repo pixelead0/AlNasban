@@ -7,6 +7,7 @@ class InheritMaintenance(models.Model):
     department = fields.Many2one('hr.department')
     maintenance_required = fields.Selection([('y','Yes'),('n','No')],default='n')
     repair_count = fields.Integer(compute='_repair_count')
+    have_repair = fields.Boolean(default=False)
 
     def repair_view(self):
         rep_ids = []
@@ -42,6 +43,7 @@ class InheritRepair(models.Model):
     _inherit = 'repair.order'
     maintenance_count = fields.Integer(compute='_maintenance_count')
     maintenance_code = fields.Char()
+    have_maintenance = fields.Boolean(default=False)
 
 
     def maintenance_view(self):
