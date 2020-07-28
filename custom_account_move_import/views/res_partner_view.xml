@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Partner form view-->
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form.sg.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="property_account_payable_id" position="after">
+                <field name="linked_analytic_account_id"/>
+                <field name="micros_alternative_name"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

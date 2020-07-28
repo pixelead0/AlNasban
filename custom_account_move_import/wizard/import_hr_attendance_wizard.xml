@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_import_Attendances_form_view" model="ir.ui.view">
+            <field name="name">view.import.hr.attendance.form.view</field>
+            <field name="model">import.hr.attendance</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Import Attendances">
+                    <group col="4">
+                        <separator string="Select your file :" colspan="4" />
+                        <field name="xls_file" filename="filename" />
+                        <field name="filename" invisible="1" />
+                    </group>
+                <footer>
+                    <button name="action_import_attendances" string="Import" type="object" class="oe_highlight" />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action of Attendances Import -->
+        <record id="action_attendances_import" model="ir.actions.act_window">
+            <field name="name">Import Attendances</field>
+            <field name="res_model">import.hr.attendance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_attendances_import" action="action_attendances_import" name="Import Attendances"
+                  parent="hr_attendance.menu_hr_attendance_root"
+                  groups="hr.group_hr_manager"
+                  sequence="22" />
+
+    </data>
+</odoo>

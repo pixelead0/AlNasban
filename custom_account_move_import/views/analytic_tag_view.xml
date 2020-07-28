@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Analytic Tag form view-->
+    <record id="account_analytic_tag_form_view_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.tag.form.view.inherit</field>
+        <field name="model">account.analytic.tag</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="analytic.account_analytic_tag_form_view"/>
+        <field name="arch" type="xml">
+            <field name="active_analytic_distribution" position="after">
+                <field name="account_id"/>
+                <field name="partner_id"/>
+                <field name="separate_jv_line"/>
+            </field>
+            <field name="analytic_distribution_ids" position="before">
+                <group>
+                    <group>
+                        <field name="alternate_names_ids" nolabel="1">
+                            <tree string="Alternate Names" editable="bottom">
+                                <field name="name"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+            </field>
+        </field>
+    </record>
+
+</odoo>
