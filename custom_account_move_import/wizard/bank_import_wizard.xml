@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form view of Custom Bank Import -->
+        <record id="custom_bank_import_form_view" model="ir.ui.view">
+            <field name="name">custom.bank.import.form.view</field>
+            <field name="model">custom.bank.import</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Import File">
+                    <separator string="Select your file(s) :" colspan="4" />
+                    <field nolabel="1" name="import_file_ids" required="1">
+                        <tree>
+                            <field name="filename"/>
+                        </tree>
+                        <form>
+                             <field name="csv_file" filename="filename" />
+                            <field name="filename" invisible="1" />
+                        </form>
+
+                    </field>
+
+                    <separator string="Bank Import" colspan="4" />
+                    <group>
+                    <group string="Income">
+                        <field name="entry_date"/>
+                        <field name="journal_id"/>
+                        <field name="debit_account_id"/>
+                        <!--<field name="sale_account_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"/>
+                        <field name="sale_journal_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"
+                                                        attrs="{'invisible': [('is_historic_import', '=', True)],
+                                                        'required': [('is_historic_import', '=', False)]}"/>
+                        <field name="receivable_account_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"/>
+                        <field name="tax_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"/>-->
+                    </group>
+                    <group string="Expense">
+                        <field name="expense_account_id"/>
+                        <field name="expense_credit_id"/>
+                        <field name="purchase_tax_id"/>
+                    </group>
+                    </group>
+                    <!--<separator string="COGS Entries" colspan="4" attrs="{'invisible': [('is_historic_import', '=', True)]}"/>
+                    <group col="4" attrs="{'invisible': [('is_historic_import', '=', True)]}">
+                        <field name="inventory_account_id"
+                               options="{'no_create_edit':True, 'no_open':True,'no_create':True}"
+                               attrs="{'required': [('is_historic_import', '=', False)]}"/>
+                        <field name="cogs_account_id"
+                               options="{'no_create_edit':True, 'no_open':True,'no_create':True}"
+                               attrs="{'required': [('is_historic_import', '=', False)]}"/>
+                    </group>-->
+
+                <footer>
+                    <button name="import_bank_data" string="Import XLS" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action of Bank Import -->
+        <record id="action_bank_import" model="ir.actions.act_window">
+            <field name="name">Bank Import</field>
+            <field name="res_model">custom.bank.import</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_bank_import" action="action_bank_import" name="Bank Import"
+                  parent="account.menu_finance_entries"
+                  sequence="21"/>
+    </data>
+</odoo>

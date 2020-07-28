@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form view of Custom Account move Import -->
+        <record id="custom_account_move_import_form_view" model="ir.ui.view">
+            <field name="name">custom.account.move.import.form</field>
+            <field name="model">custom.account.move.import</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Import File">
+                    <field name="is_historic_import" invisible="1" />
+                        <separator string="Select your file(s) :" colspan="4" />
+                        <field nolabel="1" name="import_file_ids"
+                               attrs="{'invisible': [('is_historic_import', '=', False)],
+                                       'required': [('is_historic_import', '=', True)]}">
+                            <tree>
+                                <field name="filename"/>
+                            </tree>
+                            <form>
+                                 <field name="csv_file" filename="filename" />
+                                <field name="filename" invisible="1" />
+                            </form>
+
+                        </field>
+                    <group>
+                        <field name="csv_file" filename="filename" attrs="{'invisible': [('is_historic_import', '=', True)],
+                                                                           'required': [('is_historic_import', '=', False)]}"/>
+                        <field name="filename" invisible="1" />
+                    </group>
+                    <separator string="Sales Entries" colspan="4" />
+                    <group col="4">
+                        <field name="sale_account_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"/>
+                        <field name="sale_journal_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"
+                                                        attrs="{'invisible': [('is_historic_import', '=', True)],
+                                                        'required': [('is_historic_import', '=', False)]}"/>
+                        <field name="receivable_account_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"/>
+                        <field name="tax_id" options="{'no_create_edit':True, 'no_open':True,'no_create':True}"/>
+                        <field name="entry_date"
+                               attrs="{'invisible': [('is_historic_import', '=', False)], 'required': [('is_historic_import', '=', True)]}" />
+                    </group>
+                    <separator string="COGS Entries" colspan="4" attrs="{'invisible': [('is_historic_import', '=', True)]}"/>
+                    <group col="4" attrs="{'invisible': [('is_historic_import', '=', True)]}">
+                        <field name="inventory_account_id"
+                               options="{'no_create_edit':True, 'no_open':True,'no_create':True}"
+                               attrs="{'required': [('is_historic_import', '=', False)]}"/>
+                        <field name="cogs_account_id"
+                               options="{'no_create_edit':True, 'no_open':True,'no_create':True}"
+                               attrs="{'required': [('is_historic_import', '=', False)]}"/>
+                    </group>
+
+                <footer>
+                    <button name="import_account_move" string="Import" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('is_historic_import', '=', True)]}"/>
+                    <button name="import_historic_account_move" string="Import XLS" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('is_historic_import', '=', False)]}"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action of Custom Account move Import -->
+        <record id="action_custom_move_import" model="ir.actions.act_window">
+            <field name="name">Import Journal Entries</field>
+            <field name="res_model">custom.account.move.import</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_custom_import_move" action="action_custom_move_import" name="Import Journal Entries"
+                  parent="sale.sale_menu_root"
+                  groups="account.group_account_invoice"
+                  sequence="20" />
+
+        <!-- Action of Historic Account move Import -->
+        <record id="action_historic_move_import" model="ir.actions.act_window">
+            <field name="name">Import Historic Journal Entries</field>
+            <field name="res_model">custom.account.move.import</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'default_is_historic_import':1}</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_historic_import_move" action="action_historic_move_import" name="Import Historic Journal Entries"
+                  parent="sale.sale_menu_root"
+                  groups="account.group_account_invoice"
+                  sequence="21" />
+    </data>
+</odoo>

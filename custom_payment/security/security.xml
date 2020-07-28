@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Security group -->
+        <record id="group_prods" model="res.groups">
+            <field name="name">Product Create</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+         <record model="ir.module.category" id="especial_rights_emp">
+			<field name="name">Default Apps</field>
+			<field name="description">Allow to view default apps</field>
+			<field name="sequence">48</field>
+	</record>
+		<record id="allow_group_spec" model="res.groups">
+			<field name="name">User</field>
+			<field name="category_id" ref="custom_payment.especial_rights_emp" />
+		</record>
+    </data>
+</odoo>
